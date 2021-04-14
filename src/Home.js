@@ -40,7 +40,6 @@ const Home = (userData) => {
     let history = useHistory();
 
     const setProfileClicked = (user, index) => {
-        console.log('whats index', index)
         let selectedUser = user;
         let selectedUserIndex = index;
         history.push({

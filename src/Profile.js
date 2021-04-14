@@ -81,10 +81,6 @@ const Profile = (userData) => {
         history.push('/')
     }
 
-    console.log('what is this indivuser', individualUser)
-    console.log('what is ACTIVE INDEX VALUE', activeIndex)
-    console.log('USERDATA.LENGTH', userData.results.length)
-
     return (
         <Container className={classes.profileContainer} smaxWidth="lg">
             <h1 className={classes.homeLink} onClick={setHomeClicked}>Home</h1>
