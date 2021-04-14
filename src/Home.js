@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -40,17 +39,25 @@ const Home = (userData) => {
 
     let history = useHistory();
 
-    const setProfileClicked = (user) => {
+    const setProfileClicked = (user, index) => {
+        console.log('whats index', index)
         let selectedUser = user;
-        history.push('/profile', {params: selectedUser})
+        let selectedUserIndex = index;
+        history.push({
+            pathname: '/profile',
+            state: {
+                userInfo: selectedUser,
+                userIndex: selectedUserIndex
+            }
+        })
     }
 
     return (
         <Container maxWidth="lg">
             <h1>Person App</h1>
             <Grid className={classes.homePageGridCard} container spacing={3}>
-            {userData.results.map(user => (
-                <Grid key={user.id} item xs={4} onClick={() => { setProfileClicked(user)}}>
+            {userData.results.map((user, index) => (
+                <Grid key={user.id} item xs={4} onClick={() => { setProfileClicked(user, index)}}>
                     <Paper className={classes.paper}>
                         <img className={classes.homePageProfileImage} src={user.picture.large}/>
                         <p className={classes.homePageNameTitle}>{`${user.name.title} ${user.name.first} ${user.name.last}`}</p>

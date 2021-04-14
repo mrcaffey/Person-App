@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
       height: '100vh'
     },
     homeLink: {
-        textDecoration: 'none'
+        textDecoration: 'none',
+        cursor: 'pointer'
     },
     profileDiv: {
         position: 'absolute',
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     profileInfoTitle: {
         fontSize: '18px',
         fontWeight: 'bold'
-    }
+    },
   }));
 
 const Profile = (userData) => {
@@ -52,78 +53,67 @@ const Profile = (userData) => {
     let history = useHistory();
 
     const location = useLocation();
-    const individualUser = location.state.params;
+    const individualUserIndex = location.state.userIndex;
+    const individualUser = location.state.userInfo;
     
-    const [allUsers, setAllUsers] = useState([]);
-    const [nextUserProfile, setNextUserProfile] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0)
-    
+    {/* Set active index in state as index passed in as param from Home */}
+    const [activeIndex, setActiveIndex] = useState(individualUserIndex)
     
     const nextUser = () => {
-        // find current user in userData arr, then set profile to next user in arr
-        setNextUserProfile(true)
-        setActiveIndex(activeIndex + 1)
+        {/*If highest user index, set activeIndex value to 0*/}
+        if (activeIndex === userData.results.length -1){
+            setActiveIndex(0)
+        } else {
+            setActiveIndex(activeIndex + 1)
+        }
     }
 
     const prevUser = () => {
-        setNextUserProfile(true)
+        {/*If first user index and we go back, sets activeIndex to highest user index*/}
         if (activeIndex === 0){
             setActiveIndex(userData.results.length -1)
         } else {
             setActiveIndex(activeIndex - 1);
         }
-        console.log('whats current index', activeIndex)
     }
 
-    const navigateHome = () => {
+    const setHomeClicked = () => {
         history.push('/')
     }
 
-    useEffect(() => {
-        setAllUsers(userData);
-        console.log('USERDATA', userData)
-    })
-
+    console.log('what is this indivuser', individualUser)
+    console.log('what is ACTIVE INDEX VALUE', activeIndex)
+    console.log('USERDATA.LENGTH', userData.results.length)
 
     return (
         <Container className={classes.profileContainer} smaxWidth="lg">
-            <h1><a href="/" className={classes.homeLink}>Home</a></h1>
+            <h1 className={classes.homeLink} onClick={setHomeClicked}>Home</h1>
             <div className={classes.profileDiv}>
                 <Card className={classes.profileCard}>
                     <CardContent>
-                        {nextUserProfile === true ? 
-                            <>
-                                <img className={classes.profilePageImage} src={userData.results[activeIndex].picture.large}/>
-                                <p className={classes.profileNameTitle}>{userData.results[activeIndex].name.title} {userData.results[activeIndex].name.first} {userData.results[activeIndex].name.last}</p>
-                                <p>{userData.results[activeIndex].dob.age} year old {userData.results[activeIndex].gender}</p>
-                                <p className={classes.profileInfoTitle}>Address</p>
-                                <p>
-                                    {userData.results[activeIndex].location.street.number} {userData.results[activeIndex].location.street.name}, {userData.results[activeIndex].location.city}
-                                </p>
-                                <p>
-                                    {userData.results[activeIndex].location.state}, {userData.results[activeIndex].location.country} {userData.results[activeIndex].location.postcode}
-                                </p>
-                                <p className={classes.profileInfoTitle}>Phone</p>
-                                <p>{userData.results[activeIndex].phone}</p>
-                                <p>Registered {`${userData.results[activeIndex].registered.age}`} years ago</p>
-                            </>
-                            :
-                            <>
-                                <img className={classes.profilePageImage} src={individualUser.picture.large}/>
-                                <p className={classes.profileNameTitle}>{individualUser.name.title} {individualUser.name.first} {individualUser.name.last}</p>
-                                <p>{individualUser.dob.age} year old {individualUser.gender}</p>
-                                <p className={classes.profileInfoTitle}>Address</p>
-                                <p>
-                                    {individualUser.location.street.number} {individualUser.location.street.name}, {individualUser.location.city}
-                                </p>
-                                <p>
-                                    {individualUser.location.state}, {individualUser.location.country} {individualUser.location.postcode}
-                                </p>
-                                <p className={classes.profileInfoTitle}>Phone</p>
-                                <p>{individualUser.phone}</p>
-                                <p>Registered {individualUser.registered.age} years ago</p>
-                            </>
-                        }
+                        <img 
+                            className={classes.profilePageImage} 
+                            src={userData.results[activeIndex].picture.large}
+                        />
+                        <p 
+                            className={classes.profileNameTitle}>
+                            {userData.results[activeIndex].name.title} {userData.results[activeIndex].name.first} {userData.results[activeIndex].name.last}
+                        </p>
+                        <p>
+                            {userData.results[activeIndex].dob.age} year old {userData.results[activeIndex].gender}
+                        </p>
+                        <p className={classes.profileInfoTitle}>Address</p>
+                        <p>
+                            {userData.results[activeIndex].location.street.number} {userData.results[activeIndex].location.street.name}, 
+                            {userData.results[activeIndex].location.city}
+                        </p>
+                        <p>
+                            {userData.results[activeIndex].location.state}, {userData.results[activeIndex].location.country} {userData.results[activeIndex].location.postcode}
+                        </p>
+                        <p className={classes.profileInfoTitle}>Phone</p>
+                        <p>{userData.results[activeIndex].phone}</p>
+                        <p>Registered {`${userData.results[activeIndex].registered.age}`} years ago</p>
+
                         <div style={{ paddingBottom: '20px'}}>
                             <Button variant="contained" color="primary" style={{ float: 'left'}} onClick={() => prevUser()}>
                                 Previous

@@ -8,6 +8,7 @@ function App() {
 
   const [userData, setUserData] = useState({ results: [] })
 
+  {/* Effect on load & triggered on different page actions*/}
   useEffect(() => {
       const fetchData = async () => {
           const results = await axios(
@@ -15,10 +16,10 @@ function App() {
           )
           setUserData(results.data);
       };
-
       fetchData();
   },[]);
 
+  {/* render function called when route matches, displaying our array of userData */}
   return (
     <div>
       <Router>
